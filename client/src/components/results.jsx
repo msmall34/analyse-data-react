@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import List from "@material-ui/core/List";
 import { compose } from "redux";
 import { getResults } from "../model";
-import { getParams } from "../model";
-import { getDatesMin } from "../model";
-import { getDatesMax } from "../model";
-import { paramItem } from "./paramItem";
+// import { getParams } from "../model";
+// import { getDatesMin } from "../model";
+// import { getDatesMax } from "../model";
+// import { paramItem } from "./paramItem";
 import { withParam } from "../enhancers/withParam";
 import { withDateMin } from "../enhancers/withDateMin";
 import { withDateMax } from "../enhancers/withDateMax";
@@ -19,8 +19,8 @@ class PureResults extends Component {
     const { param } = this.props;
     const { dateMin } = this.props;
     const { dateMax } = this.props;
-    
-    setTimeout(() => {
+
+    // setTimeout(() => {
     //if (prevParam !== param) {
       const results = getResults(dateMin, dateMax);
       if (results.error) {
@@ -32,13 +32,13 @@ class PureResults extends Component {
         storage.setItem("results", results, storage.NAMESPACES.Result);
       }
     //}
-    }, 100);
+    // }, 100);
   }
   async componentDidUpdate({ param: prevParam }) {
     const { param } = this.props;
     const { dateMin } = this.props;
     const { dateMax } = this.props;
-    if (prevParam !== param) {
+    // if (prevParam !== param) {
       const results = await getResults(dateMin, dateMax);
       if (results.error) {
         // TODO: handle error
@@ -47,7 +47,7 @@ class PureResults extends Component {
         this.setState({ results });
         storage.setItem("results", results, storage.NAMESPACES.Result);
       }
-    }
+    // }
   }
   render() {
     console.log('results', this.state);
@@ -72,4 +72,4 @@ class PureResults extends Component {
   }
 }
 
-export const Results = compose(withParam, withDateMin, withDateMin)(PureResults);
+export const Results = compose(withParam, withDateMin, withDateMax)(PureResults);

@@ -5,13 +5,14 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { withDateMin } from "../enhancers/withDateMin";
 import { withDateMax } from "../enhancers/withDateMax";
 import { withParam } from "../enhancers/withParam";
+import { withResult } from "../enhancers/withResult";
 import { Results } from "../components/results";
 
 const buttonStyles = { display: "flex", flex: 1, justifyContent: "flex-end" };
 
-const PureSwitchResults = ({ param, dateMin, dateMax }) => (
+const PureSwitchResults = ({ result, param, dateMin, dateMax }) => (
   <section>
-    {param.length ? (
+    {result ? (
       <Results />
     ) : (
       <div>empty</div>

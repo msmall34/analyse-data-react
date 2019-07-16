@@ -15,11 +15,13 @@ import Select from '@material-ui/core/Select';
 import { connect } from "react-redux";
 import { Header } from "./header";
 import { ButtonAnalyse } from "./button";
-import { filterParams } from "../model";
+// import { filterParams } from "../model";
+import { getResults } from "../model";
 import * as Utils from "../utils";
 import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
 import { setDateMax } from "../redux/actions";
+import { setResults } from "../redux/actions";
 
 const buttonStyles = { width: "25%" };
 
@@ -44,6 +46,7 @@ class PureAnalyse extends Component {
     dateMax: "",
     data: [],
     dateMaxList: [],
+    results: [],
     loading: false
   };
   async componentDidMount() {
@@ -105,15 +108,19 @@ class PureAnalyse extends Component {
     const { dispatchParam } = this.props;
     const { dispatchDateMin } = this.props;
     const { dispatchDateMax } = this.props;
+    const { dispatchResults } = this.props;
     const { param } = this.state;
     const { dateMin } = this.state;
     const { dateMax } = this.state;
+    // const { results } = this.state;
     this.setState({ loading: true });
     //const filtered = await filterParams(param, dateMin, dateMax);
+    const results = getResults(dateMin, dateMax);
     const dispatchAll = () => {
       () => dispatchParam(param);
       () => dispatchDateMin(dateMin);
       () => dispatchDateMax(dateMax);
+      () => dispatchResults(results);
     };
     // if (filtered.error) {
       // TODO: handle error
@@ -213,7 +220,8 @@ class PureAnalyse extends Component {
 const mapDispatchToProps = dispatch => ({
   dispatchParam: param => dispatch(setParam(param)),
   dispatchDateMin: dateMin => dispatch(setDateMin(dateMin)),
-  dispatchDateMax: dateMax => dispatch(setDateMax(dateMax))
+  dispatchDateMax: dateMax => dispatch(setDateMax(dateMax)),
+  dispatchResults: results => dispatch(setResults(results))
 });
 export const Analyse = connect(
   null,
