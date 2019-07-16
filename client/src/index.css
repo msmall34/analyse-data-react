@@ -12,7 +12,11 @@ code {
     monospace;
 }
 
-#analyse-system .MuiInputBase-root {
-  width: 10%;
+#analyse-system .MuiFormControl-root {
+  width: 20%;
   margin: 20px;
+}
+
+#analyse-system .MuiButton-containedPrimary {
+  margin-top: 25px;
 }

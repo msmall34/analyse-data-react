@@ -8,7 +8,7 @@ const styles = { display: "flex", justifyContent: "center" };
 export const Header = ({ children }) => (
   <AppBar position="static" color="default">
     <Toolbar style={styles}>
-      <Typography variant="h4" color="inherit">
+      <Typography variant="h5" color="inherit">
         {children}
       </Typography>
     </Toolbar>

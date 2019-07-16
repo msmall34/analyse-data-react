@@ -23,6 +23,20 @@ import { setDateMax } from "../redux/actions";
 
 const buttonStyles = { width: "25%" };
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
 class PureAnalyse extends Component {
   state = {
     param: "",
@@ -46,6 +60,9 @@ class PureAnalyse extends Component {
           console.log('error on Analyse componentDidMounto')
         }
       )
+  }
+  classes = () => {
+    return useStyles();
   }
   handleParamChange = param => event => {
     this.setState({
@@ -88,18 +105,20 @@ class PureAnalyse extends Component {
     const { dispatchParam } = this.props;
     const { dispatchDateMin } = this.props;
     const { dispatchDateMax } = this.props;
-    const param = this.state.param;
-    const dateMin = this.state.dateMin;
-    const dateMax = this.state.dateMax;
+    const { param } = this.state;
+    const { dateMin } = this.state;
+    const { dateMax } = this.state;
     this.setState({ loading: true });
     //const filtered = await filterParams(param, dateMin, dateMax);
+    const dispatchAll = () => {
+      () => dispatchParam(param);
+      () => dispatchDateMin(dateMin);
+      () => dispatchDateMax(dateMax);
+    };
     // if (filtered.error) {
       // TODO: handle error
     // } else {
-      this.setState({ loading: false }, 
-        () => dispatchParam(param),
-        () => dispatchDateMin(dateMin),
-        () => dispatchDateMax(dateMax));
+      this.setState({ loading: false }, () => dispatchAll());
     // }
   };
   get loadingButton() {
@@ -119,6 +138,8 @@ class PureAnalyse extends Component {
     return (
       <main>
         <Header>Analyse des informations systèmes</Header>
+        <FormControl className={this.classes.formControl}>
+        <FormHelperText>Parametres</FormHelperText>
         <Select
           value={param}
           onChange={this.handleParamChange("param")}
@@ -147,34 +168,41 @@ class PureAnalyse extends Component {
           <MenuItem value='5m'>load average for last 5 minutes</MenuItem>
           <MenuItem value='15m'>load average for last 15 minutes</MenuItem>
         </Select>
+        </FormControl>
 
-        <Select
-          value={this.state.dateMin}
-          onChange={this.handleDateMinChange("dateMin")}
-          inputProps={{
-            name: 'dateMin',
-            id: 'dateMin',
-          }}
-        >
-          {this.state.data.map((obj, i) => {
-            return <MenuItem key={i} value={obj.time}>{obj.time}</MenuItem>
-          })}
+        <FormControl className={this.classes.formControl}>
+        <FormHelperText>Du :</FormHelperText>
+          <Select
+            value={this.state.dateMin}
+            onChange={this.handleDateMinChange("dateMin")}
+            inputProps={{
+              name: 'dateMin',
+              id: 'dateMin',
+            }}
+          >
+            {this.state.data.map((obj, i) => {
+              return <MenuItem key={i} value={obj.time}>{obj.time}</MenuItem>
+            })}
 
-        </Select>
+          </Select>
+        </FormControl>
 
-        <Select
-          value={dateMax}
-          onChange={this.handleDateMaxChange("dateMax")}
-          inputProps={{
-            name: 'dateMax',
-            id: 'dateMax',
-          }}
-        >
-          {this.state.dateMaxList.map((dateMax, i) => {
-            return <MenuItem key={i} value={dateMax.time}>{dateMax.time}</MenuItem>
-          })}
+        <FormControl className={this.classes.formControl}>
+        <FormHelperText>Au :</FormHelperText>
+          <Select
+            value={dateMax}
+            onChange={this.handleDateMaxChange("dateMax")}
+            inputProps={{
+              name: 'dateMax',
+              id: 'dateMax',
+            }}
+          >
+            {this.state.dateMaxList.map((dateMax, i) => {
+              return <MenuItem key={i} value={dateMax.time}>{dateMax.time}</MenuItem>
+            })}
 
-        </Select>
+          </Select>
+        </FormControl>
 
         {this.loadingButton}
       </main>
