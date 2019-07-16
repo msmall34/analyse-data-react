@@ -1,0 +1,17 @@
+﻿Entrée : liste de parametres
+Entrée : toutes les dates du fichier  => input min
+Entrée : toutes les dates du fichier  => input max
+
+button : analyser
+
+un panel de resultat :
+la liste des valeurs du parametre choisi dans l'intervale des dates selectionnées
+
+un panel avarages :
+la valeur min avec la date associée
+la valeur max avec la date associée
+la moyenne de la liste des valeur du premier panel
+
+https://help.github.com/en/articles/adding-an-existing-project-to-github-using-the-command-line
+
+
