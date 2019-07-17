@@ -2,10 +2,10 @@ import { connect } from "react-redux";
 import { setResults } from "../redux/actions";
 
 const mapStateToProps = state => ({
-  result: state.results.result,
+  results: state.results.results
 });
 const mapDispatchToProps = dispatch => ({
-  dispatchParam: result => dispatch(setResults(result))
+  dispatchResults: results => dispatch(setResults(results))
 });
 
 export const withResult = connect(

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
-import InputLabel from '@material-ui/core/InputLabel';
+// import Input from '@material-ui/core/Input';
+// import OutlinedInput from '@material-ui/core/OutlinedInput';
+// import FilledInput from '@material-ui/core/FilledInput';
+// import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import { Header } from "./header";
 import { ButtonAnalyse } from "./button";
 // import { filterParams } from "../model";
-import { getResults } from "../model";
+// import { getResults } from "../model";
 import * as Utils from "../utils";
 import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
@@ -38,6 +38,8 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(2),
   },
 }));
+
+const createError = message => ({ error: true, message });
 
 class PureAnalyse extends Component {
   state = {
@@ -81,10 +83,8 @@ class PureAnalyse extends Component {
       const dateMin = this.state.dateMin;
       //const dateMaxListUpdated = Utils.compareDates(data, dateMin);
       const dateMaxListUpdated = data;
-      console.log('this.state', this.state);
-      console.log('data', data);
-      console.log('dateMin', dateMin);
-      console.log('dateMaxListUpdated', dateMaxListUpdated);
+console.log('this.state handleDateMinChange', this.state);
+console.log('dateMaxListUpdated', dateMaxListUpdated);
       this.setState({
         dateMaxList: dateMaxListUpdated
       });
@@ -94,15 +94,80 @@ class PureAnalyse extends Component {
     this.setState({
       dateMax: event.target.value
     });
-    setTimeout(() => {
+    // setTimeout(() => {
       const data = this.state.data;
       const dateMin = this.state.dateMin;
-      //const dateMaxListUpdated = Utils.compareDates(data, dateMin);
-      const dateMaxListUpdated = data;
-      console.log('this.state', this.state);
-      console.log('data', data);
-      console.log('dateMin', dateMin);
-    }, 100);
+      const dateMaxListUpdated = Utils.compareDates(data, dateMin);
+      //const dateMaxListUpdated = data;
+console.log('this.state handleDateMaxChange', this.state);
+    // }, 100);
+  };
+
+  checkParam = (results, inputs) => {
+    return results.filter(el => {
+      // el.toLowerCase().indexOf(requete.toLowerCase()) !== -1
+
+      const dateMinSelected = inputs ? inputs[0] : ''; // "16-03 10:08:28"
+      const dateMinSelectedParts = dateMinSelected ? dateMinSelected.split(' ') : '';
+      const dateMinHours = dateMinSelectedParts ? dateMinSelectedParts[1] : ''; // "10:08:28"
+      const dateMinHoursParts = dateMinHours ? dateMinHours.split(':') : '';
+      const minutesInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[1]) : '';
+      // const dateMinNumb = strToDate(inputs[0]).getHours();
+
+
+      const date = el ? el.time : ''; // "16-03 10:08:28"
+      const dateParts = date ? date.split(' ') : '';
+      const dateHours = dateParts ? dateParts[1] : ''; // "10:08:28"
+      const dateHoursParts = dateHours ? dateHours.split(':') : '';
+      const minutesIndate = dateHoursParts ? Number(dateHoursParts[1]) : '';
+      //const date = strToDate(el.time).getHours();
+
+
+      const dateMaxSelected = inputs ? inputs[1] : '' ; // "16-03 10:08:28"
+      const dateMaxSelectedParts = dateMaxSelected ? dateMaxSelected.split(' ') : '';
+      const dateMaxHours = dateMaxSelectedParts ? dateMaxSelectedParts[1] : ''; // "10:08:28"
+      const dateMaxHoursParts = dateMaxHours ? dateMaxHours.split(':') : '';
+      const minutesInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[1]) : '';
+      //const dateMaxNumb = strToDate(inputs[1]).getHours();
+
+      if ((minutesInDateMax >= minutesIndate) && (minutesIndate <= minutesInDateMin)) {
+        return el;
+      } else {
+        // elementsInvalides ++;
+        // console.log('elementsInvalides', elementsInvalides);
+        return false;
+      }
+
+    });
+  }
+
+
+  analyseGetResults = async (param, dateMin, dateMax)  => {
+  fetch("http://localhost:5000/api/getList")
+    .then(res => res.json())
+    .then(
+      (results) => {
+        const inputs = [dateMin, dateMax];
+        const filteredResults = this.checkParam(results, inputs);
+// console.log('analyseGetResults in analyse', filteredResults);
+        // return filteredResults;
+        const { dispatchParam } = this.props;
+        const { dispatchDateMin } = this.props;
+        const { dispatchDateMax } = this.props;
+        const { dispatchResults } = this.props;
+        this.setState({
+          results: filteredResults
+        });
+        dispatchParam(param);
+      dispatchDateMin(dateMin);
+      dispatchDateMax(dateMax);
+      dispatchResults(results);
+      },
+      (error) => {
+        console.log('error on getResults');
+        createError(error.message);
+      }
+    )
   };
   search = async () => {
     const { dispatchParam } = this.props;
@@ -112,21 +177,27 @@ class PureAnalyse extends Component {
     const { param } = this.state;
     const { dateMin } = this.state;
     const { dateMax } = this.state;
-    // const { results } = this.state;
     this.setState({ loading: true });
     //const filtered = await filterParams(param, dateMin, dateMax);
-    const results = getResults(dateMin, dateMax);
-    const dispatchAll = () => {
-      () => dispatchParam(param);
-      () => dispatchDateMin(dateMin);
-      () => dispatchDateMax(dateMax);
-      () => dispatchResults(results);
-    };
-    // if (filtered.error) {
+
+    if (param && dateMin && dateMax) {
+      
+
+      const results = this.analyseGetResults(dateMin, dateMax);
+console.log('getResults in analyse', results)
+      
+      setTimeout(() => {
+      this.setState({ loading: false });
+console.log('this.state search', this.state);
+      dispatchParam(param);
+      dispatchDateMin(dateMin);
+      dispatchDateMax(dateMax);
+      dispatchResults(results);
+      }, 100);
+    } else {
       // TODO: handle error
-    // } else {
-      this.setState({ loading: false }, () => dispatchAll());
-    // }
+      console.log('error in search');
+    }
   };
   get loadingButton() {
     const { loading } = this.state;

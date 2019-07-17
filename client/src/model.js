@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api/getList";
+// const BASE_URL = "http://localhost:5000/api/getList";
 
 const createError = message => ({ error: true, message });
 
@@ -81,8 +81,8 @@ function checkParam(results, inputs) {
       const minutesInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[1]) : '';
       //const dateMaxNumb = strToDate(inputs[1]).getHours();
 
-      if ((minutesInDateMax >= minutesIndate) && (minutesIndate <= minutesInDateMin)) {
-        return true;
+      if ((minutesInDateMin <= minutesIndate) && (minutesIndate <= minutesInDateMax)) {
+        return el;
       } else {
         // elementsInvalides ++;
         // console.log('elementsInvalides', elementsInvalides);
@@ -90,6 +90,7 @@ function checkParam(results, inputs) {
       }
 
     });
+
 }
 
 // export const getResults = async (dateMin, dateMax)  => {
@@ -111,8 +112,11 @@ fetch("http://localhost:5000/api/getList")
     (results) => {
       const inputs = [dateMin, dateMax];
       const filteredResults = checkParam(results, inputs);
-      console.log('result', filteredResults);
+      console.log('getResults in model', filteredResults);
       return filteredResults;
+      // this.setState({
+      //   results: filteredResults
+      // });
     },
     (error) => {
       console.log('error on getResults');

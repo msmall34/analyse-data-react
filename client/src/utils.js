@@ -8,25 +8,25 @@
 
 export const compareDates = (arr, dateMin) => {
 	const filtertered = arr.filter((el) => {
-		const dateMinSelected = dateMin; // "16-03 10:08:28"
-		const dateMinSelectedParts = dateMinSelected.split(' ');
+		const dateMinSelected = dateMin ? dateMin : ''; // "16-03 10:08:28"
+		const dateMinSelectedParts = dateMinSelected ? dateMinSelected.split(' ') : '';
 
 		// const dateMinDay = dateMinSelectedParts[0]; // "16-03"
-		const dateMinHours = dateMinSelectedParts[1]; // "10:08:28"
+		const dateMinHours = dateMinSelectedParts ? dateMinSelectedParts[1] : ''; // "10:08:28"
 
-		const dateMinHoursParts = dateMinHours.split(':');
-		const minutesInDateMin = Number(dateMinHoursParts[1]);
+		const dateMinHoursParts = dateMinHours ? dateMinHours.split(':') : '';
+		const minutesInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[1]) : '';
 
 
 		
-		const currentDate = el.time; // "16-03 10:08:28"
-		const currentDateParts = currentDate.split(' ');
+		const currentDate = el ? el.time : ''; // "16-03 10:08:28"
+		const currentDateParts = currentDate ? currentDate.split(' ') : '';
 
 		// const currentDateDay = currentDateParts[0]; // "16-03"
-		const currentDateHours = currentDateParts[1]; // "10:08:28"
+		const currentDateHours = currentDateParts ? currentDateParts[1] : ''; // "10:08:28"
 
-		const currentDateHoursParts = currentDateHours.split(':');
-		const minutesInCurrentDate = Number(currentDateHoursParts[1]);
+		const currentDateHoursParts = currentDateHours ? currentDateHours.split(':') : '';
+		const minutesInCurrentDate = currentDateHoursParts ? Number(currentDateHoursParts[1]) : '';
 
 		if (minutesInCurrentDate > minutesInDateMin) {
 			return true;
