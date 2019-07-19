@@ -16,39 +16,41 @@ import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
 import { setDateMax } from "../redux/actions";
 import { setResults } from "../redux/actions";
+import * as Utils from "../utils";
 import * as storage from "../storageHelper";
 
 const createError = message => ({ error: true, message });
 
 class PureResults extends Component {
   state = {
-    param: "",
-    dateMin: "",
-    dateMax: "",
-    results: storage.getItem("results", storage.NAMESPACES.Results) || []
+    results: []
   };
-  checkParam = (results, inputs) => {
+  filterResults = (results, inputs) => {
     return results.filter(el => {
 
       const dateMinSelected = inputs ? inputs[0] : ''; // "16-03 10:08:28"
       const dateMinSelectedParts = dateMinSelected ? dateMinSelected.split(' ') : '';
       const dateMinHours = dateMinSelectedParts ? dateMinSelectedParts[1] : ''; // "10:08:28"
       const dateMinHoursParts = dateMinHours ? dateMinHours.split(':') : '';
+      const hoursInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[0]) : '';
       const minutesInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[1]) : '';
 
       const date = el ? el.time : ''; // "16-03 10:08:28"
       const dateParts = date ? date.split(' ') : '';
       const dateHours = dateParts ? dateParts[1] : ''; // "10:08:28"
       const dateHoursParts = dateHours ? dateHours.split(':') : '';
+      const hoursIndate = dateHoursParts ? Number(dateHoursParts[0]) : '';
       const minutesIndate = dateHoursParts ? Number(dateHoursParts[1]) : '';
 
       const dateMaxSelected = inputs ? inputs[1] : '' ; // "16-03 10:08:28"
       const dateMaxSelectedParts = dateMaxSelected ? dateMaxSelected.split(' ') : '';
       const dateMaxHours = dateMaxSelectedParts ? dateMaxSelectedParts[1] : ''; // "10:08:28"
       const dateMaxHoursParts = dateMaxHours ? dateMaxHours.split(':') : '';
+      const hoursInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[0]) : '';
       const minutesInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[1]) : '';
 
-      if ((minutesInDateMax >= minutesIndate) && (minutesIndate <= minutesInDateMin)) {
+      if (((minutesInDateMax >= minutesIndate) && (minutesIndate >= minutesInDateMin))
+        && ((hoursInDateMax >= hoursIndate) && (hoursIndate >= hoursInDateMin))) {
         return el;
       } else {
         return false;
@@ -56,15 +58,13 @@ class PureResults extends Component {
 
     });
   }
-  filterResults = async (dateMin, dateMax, results)  => {
-    const inputs = [dateMin, dateMax];
-    // this.analyseGetResults(dateMin, dateMax);
+  getResults = async (dateMin, dateMax)  => {
     fetch("http://localhost:5000/api/getList")
     .then(res => res.json())
     .then(
       (results) => {
         const inputs = [dateMin, dateMax];
-        const filteredResults = this.checkParam(results, inputs);
+        const filteredResults = this.filterResults(results, inputs);
         this.setState({
           results: filteredResults
         });
@@ -75,28 +75,32 @@ class PureResults extends Component {
       }
     )
   };
-  async componentDidUpdate({ param: prevParam }) {
+  async componentDidMount() {
     const { param } = this.props;
     const { dateMin } = this.props;
     const { dateMax } = this.props;
-    const { results } = this.props;
+    if (param && dateMin && dateMax) {
+      this.getResults(dateMin, dateMax);
+    } else {
+      // TODO: handle error
+      console.log('error in results');
+    }
+  }
+  async componentDidUpdate({ param: prevParam, dateMin: prevDateMin, dateMax: prevDateMax }) {
+    const { param } = this.props;
+    const { dateMin } = this.props;
+    const { dateMax } = this.props;
 
-    setTimeout(() => {
-    if (param, dateMin, dateMax) {
-      this.filterResults(dateMin, dateMax, results);
+    if (prevParam !== param || prevDateMin !== dateMin || prevDateMax !== dateMax) {
       if (param && dateMin && dateMax) {
-        storage.setItem("results", results, storage.NAMESPACES.Result);
+        this.getResults(dateMin, dateMax);
       } else {
         // TODO: handle error
         console.log('error in results');
       }
     }
-    }, 100);
   }
   render() {
-    const { param } = this.state;
-    const { dateMin } = this.state;
-    const { dateMax } = this.state;
     const { results } = this.state;
     return (
       <List>

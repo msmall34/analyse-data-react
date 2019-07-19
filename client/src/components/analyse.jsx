@@ -1,12 +1,7 @@
 import React, { Component } from "react";
-// import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { makeStyles } from '@material-ui/core/styles';
-// import Input from '@material-ui/core/Input';
-// import OutlinedInput from '@material-ui/core/OutlinedInput';
-// import FilledInput from '@material-ui/core/FilledInput';
-// import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
@@ -48,7 +43,6 @@ class PureAnalyse extends Component {
     dateMax: "",
     data: [],
     dateMaxList: [],
-    results: [],
     loading: false
   };
   async componentDidMount() {
@@ -58,7 +52,7 @@ class PureAnalyse extends Component {
         (obj) => {
           this.setState({
             data: obj,
-            dateMaxList: obj
+            dateMaxList: obj,
           });
         },
         (error) => {
@@ -81,10 +75,8 @@ class PureAnalyse extends Component {
     setTimeout(() => {
       const data = this.state.data;
       const dateMin = this.state.dateMin;
-      //const dateMaxListUpdated = Utils.compareDates(data, dateMin);
-      const dateMaxListUpdated = data;
-console.log('this.state handleDateMinChange', this.state);
-console.log('dateMaxListUpdated', dateMaxListUpdated);
+      const dateMaxListUpdated = Utils.compareDates(data, dateMin);
+      console.log('this.state handleDateMinChange', this.state);
       this.setState({
         dateMaxList: dateMaxListUpdated
       });
@@ -98,101 +90,25 @@ console.log('dateMaxListUpdated', dateMaxListUpdated);
       const data = this.state.data;
       const dateMin = this.state.dateMin;
       const dateMaxListUpdated = Utils.compareDates(data, dateMin);
-      //const dateMaxListUpdated = data;
-console.log('this.state handleDateMaxChange', this.state);
+      console.log('this.state handleDateMaxChange', this.state);
     // }, 100);
-  };
-
-  checkParam = (results, inputs) => {
-    return results.filter(el => {
-      // el.toLowerCase().indexOf(requete.toLowerCase()) !== -1
-
-      const dateMinSelected = inputs ? inputs[0] : ''; // "16-03 10:08:28"
-      const dateMinSelectedParts = dateMinSelected ? dateMinSelected.split(' ') : '';
-      const dateMinHours = dateMinSelectedParts ? dateMinSelectedParts[1] : ''; // "10:08:28"
-      const dateMinHoursParts = dateMinHours ? dateMinHours.split(':') : '';
-      const minutesInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[1]) : '';
-      // const dateMinNumb = strToDate(inputs[0]).getHours();
-
-
-      const date = el ? el.time : ''; // "16-03 10:08:28"
-      const dateParts = date ? date.split(' ') : '';
-      const dateHours = dateParts ? dateParts[1] : ''; // "10:08:28"
-      const dateHoursParts = dateHours ? dateHours.split(':') : '';
-      const minutesIndate = dateHoursParts ? Number(dateHoursParts[1]) : '';
-      //const date = strToDate(el.time).getHours();
-
-
-      const dateMaxSelected = inputs ? inputs[1] : '' ; // "16-03 10:08:28"
-      const dateMaxSelectedParts = dateMaxSelected ? dateMaxSelected.split(' ') : '';
-      const dateMaxHours = dateMaxSelectedParts ? dateMaxSelectedParts[1] : ''; // "10:08:28"
-      const dateMaxHoursParts = dateMaxHours ? dateMaxHours.split(':') : '';
-      const minutesInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[1]) : '';
-      //const dateMaxNumb = strToDate(inputs[1]).getHours();
-
-      if ((minutesInDateMax >= minutesIndate) && (minutesIndate <= minutesInDateMin)) {
-        return el;
-      } else {
-        // elementsInvalides ++;
-        // console.log('elementsInvalides', elementsInvalides);
-        return false;
-      }
-
-    });
-  }
-
-
-  analyseGetResults = async (param, dateMin, dateMax)  => {
-  fetch("http://localhost:5000/api/getList")
-    .then(res => res.json())
-    .then(
-      (results) => {
-        const inputs = [dateMin, dateMax];
-        const filteredResults = this.checkParam(results, inputs);
-// console.log('analyseGetResults in analyse', filteredResults);
-        // return filteredResults;
-        const { dispatchParam } = this.props;
-        const { dispatchDateMin } = this.props;
-        const { dispatchDateMax } = this.props;
-        const { dispatchResults } = this.props;
-        this.setState({
-          results: filteredResults
-        });
-        dispatchParam(param);
-      dispatchDateMin(dateMin);
-      dispatchDateMax(dateMax);
-      dispatchResults(results);
-      },
-      (error) => {
-        console.log('error on getResults');
-        createError(error.message);
-      }
-    )
   };
   search = async () => {
     const { dispatchParam } = this.props;
     const { dispatchDateMin } = this.props;
     const { dispatchDateMax } = this.props;
-    const { dispatchResults } = this.props;
     const { param } = this.state;
     const { dateMin } = this.state;
     const { dateMax } = this.state;
     this.setState({ loading: true });
-    //const filtered = await filterParams(param, dateMin, dateMax);
 
     if (param && dateMin && dateMax) {
-      
-
-      const results = this.analyseGetResults(dateMin, dateMax);
-console.log('getResults in analyse', results)
-      
       setTimeout(() => {
-      this.setState({ loading: false });
-console.log('this.state search', this.state);
-      dispatchParam(param);
-      dispatchDateMin(dateMin);
-      dispatchDateMax(dateMax);
-      dispatchResults(results);
+        this.setState({ loading: false });
+        dispatchParam(param);
+        dispatchDateMin(dateMin);
+        dispatchDateMax(dateMax);
+        console.log('this.state search', this.state);
       }, 100);
     } else {
       // TODO: handle error
@@ -251,7 +167,7 @@ console.log('this.state search', this.state);
         <FormControl className={this.classes.formControl}>
         <FormHelperText>Du :</FormHelperText>
           <Select
-            value={this.state.dateMin}
+            value={dateMin}
             onChange={this.handleDateMinChange("dateMin")}
             inputProps={{
               name: 'dateMin',
@@ -291,8 +207,7 @@ console.log('this.state search', this.state);
 const mapDispatchToProps = dispatch => ({
   dispatchParam: param => dispatch(setParam(param)),
   dispatchDateMin: dateMin => dispatch(setDateMin(dateMin)),
-  dispatchDateMax: dateMax => dispatch(setDateMax(dateMax)),
-  dispatchResults: results => dispatch(setResults(results))
+  dispatchDateMax: dateMax => dispatch(setDateMax(dateMax))
 });
 export const Analyse = connect(
   null,
