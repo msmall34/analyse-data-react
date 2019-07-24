@@ -20,3 +20,9 @@ code {
 #analyse-system .MuiButton-containedPrimary {
   margin-top: 25px;
 }
+
+#analyse-system .MuiPaper-root.MuiPaper-elevation1.MuiPaper-rounded {
+  width: 1200px;
+  margin: 0 auto;
+  margin-top: 50px;
+}

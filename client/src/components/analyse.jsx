@@ -10,13 +10,11 @@ import Select from '@material-ui/core/Select';
 import { connect } from "react-redux";
 import { Header } from "./header";
 import { ButtonAnalyse } from "./button";
-// import { filterParams } from "../model";
-// import { getResults } from "../model";
 import * as Utils from "../utils";
 import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
 import { setDateMax } from "../redux/actions";
-import { setResults } from "../redux/actions";
+//import { setResults } from "../redux/actions";
 
 const buttonStyles = { width: "25%" };
 
@@ -56,7 +54,8 @@ class PureAnalyse extends Component {
           });
         },
         (error) => {
-          console.log('error on Analyse componentDidMounto')
+          console.log('error on Analyse componentDidMount');
+          createError(error.message);
         }
       )
   }
@@ -86,12 +85,6 @@ class PureAnalyse extends Component {
     this.setState({
       dateMax: event.target.value
     });
-    // setTimeout(() => {
-      const data = this.state.data;
-      const dateMin = this.state.dateMin;
-      const dateMaxListUpdated = Utils.compareDates(data, dateMin);
-      console.log('this.state handleDateMaxChange', this.state);
-    // }, 100);
   };
   search = async () => {
     const { dispatchParam } = this.props;

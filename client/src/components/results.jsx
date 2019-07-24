@@ -1,62 +1,45 @@
 import React, { Component } from "react";
 import List from "@material-ui/core/List";
-import { connect } from "react-redux";
 import { compose } from "redux";
-import { ResultItem } from "./resultItem";
-import { getResults } from "../model";
-// import { getParams } from "../model";
-// import { getDatesMin } from "../model";
-// import { getDatesMax } from "../model";
-// import { paramItem } from "./paramItem";
+// import { ResultItem } from "./resultItem";
 import { withDateMin } from "../enhancers/withDateMin";
 import { withDateMax } from "../enhancers/withDateMax";
 import { withParam } from "../enhancers/withParam";
 import { withResult } from "../enhancers/withResult";
-import { setParam } from "../redux/actions";
-import { setDateMin } from "../redux/actions";
-import { setDateMax } from "../redux/actions";
-import { setResults } from "../redux/actions";
+// import { setParam } from "../redux/actions";
+// import { setDateMin } from "../redux/actions";
+// import { setDateMax } from "../redux/actions";
+// import { setResults } from "../redux/actions";
 import * as Utils from "../utils";
-import * as storage from "../storageHelper";
+//import * as storage from "../storageHelper";
+//
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const createError = message => ({ error: true, message });
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: '450px',
+    marginTop: theme.spacing(3),
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 650,
+  },
+}));
 
 class PureResults extends Component {
   state = {
     results: []
   };
-  filterResults = (results, inputs) => {
-    return results.filter(el => {
-
-      const dateMinSelected = inputs ? inputs[0] : ''; // "16-03 10:08:28"
-      const dateMinSelectedParts = dateMinSelected ? dateMinSelected.split(' ') : '';
-      const dateMinHours = dateMinSelectedParts ? dateMinSelectedParts[1] : ''; // "10:08:28"
-      const dateMinHoursParts = dateMinHours ? dateMinHours.split(':') : '';
-      const hoursInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[0]) : '';
-      const minutesInDateMin = dateMinHoursParts ? Number(dateMinHoursParts[1]) : '';
-
-      const date = el ? el.time : ''; // "16-03 10:08:28"
-      const dateParts = date ? date.split(' ') : '';
-      const dateHours = dateParts ? dateParts[1] : ''; // "10:08:28"
-      const dateHoursParts = dateHours ? dateHours.split(':') : '';
-      const hoursIndate = dateHoursParts ? Number(dateHoursParts[0]) : '';
-      const minutesIndate = dateHoursParts ? Number(dateHoursParts[1]) : '';
-
-      const dateMaxSelected = inputs ? inputs[1] : '' ; // "16-03 10:08:28"
-      const dateMaxSelectedParts = dateMaxSelected ? dateMaxSelected.split(' ') : '';
-      const dateMaxHours = dateMaxSelectedParts ? dateMaxSelectedParts[1] : ''; // "10:08:28"
-      const dateMaxHoursParts = dateMaxHours ? dateMaxHours.split(':') : '';
-      const hoursInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[0]) : '';
-      const minutesInDateMax = dateMaxHoursParts ? Number(dateMaxHoursParts[1]) : '';
-
-      if (((minutesInDateMax >= minutesIndate) && (minutesIndate >= minutesInDateMin))
-        && ((hoursInDateMax >= hoursIndate) && (hoursIndate >= hoursInDateMin))) {
-        return el;
-      } else {
-        return false;
-      }
-
-    });
+  classes = () => {
+    return useStyles();
   }
   getResults = async (dateMin, dateMax)  => {
     fetch("http://localhost:5000/api/getList")
@@ -64,7 +47,8 @@ class PureResults extends Component {
     .then(
       (results) => {
         const inputs = [dateMin, dateMax];
-        const filteredResults = this.filterResults(results, inputs);
+        const filteredResults = Utils.filterResults(results, inputs);
+        console.log('filteredResults', filteredResults);
         this.setState({
           results: filteredResults
         });
@@ -102,21 +86,47 @@ class PureResults extends Component {
   }
   render() {
     const { results } = this.state;
+    // return (
+    //   <List>
+    //     {results.map((item, i, arr) => {
+    //       return (
+    //         <div key={i}>
+    //           <span>{this.props.param} </span>
+    //           <span>au </span>
+    //           <span>{item.time} </span>
+    //           <span>était de: </span>
+    //           <span>{item[this.props.param]}</span>
+    //         </div>
+    //       );
+    //     })}
+    //   </List>
+    // );
+
+
     return (
-      <List>
-        {results.map((item, i, arr) => {
-          return (
-            <div key={i}>
-              <span>{this.props.param} </span>
-              <span>au </span>
-              <span>{item.time} </span>
-              <span>était de: </span>
-              <span>{item[this.props.param]}</span>
-            </div>
-          );
-        })}
-      </List>
+      <Paper className={this.classes.root}>
+        <Table className={this.classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Parametres</TableCell>
+              <TableCell >Dates</TableCell>
+              <TableCell >Valeurs</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {results.map((item, i, arr) => (
+              <TableRow key={i}>
+                {/*<TableCell component="th" scope="row">{this.props.param}</TableCell>*/}
+                <TableCell >{this.props.param}</TableCell>
+                <TableCell >{item.time}</TableCell>
+                <TableCell >{item[this.props.param]}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
     );
+
   }
 }
 

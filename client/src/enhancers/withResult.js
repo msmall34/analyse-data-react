@@ -1,12 +1,3 @@
-// import { connect } from "react-redux";
-
-// const mapStateToProps = state => ({
-//   results: state.results.results
-// });
-
-// export const withResult = connect(mapStateToProps);
-
-
 import { connect } from "react-redux";
 import { setResults } from "../redux/actions";
 
