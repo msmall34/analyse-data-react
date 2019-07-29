@@ -14,7 +14,6 @@ import * as Utils from "../utils";
 import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
 import { setDateMax } from "../redux/actions";
-//import { setResults } from "../redux/actions";
 
 const buttonStyles = { width: "25%" };
 
