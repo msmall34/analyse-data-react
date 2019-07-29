@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { compose } from "redux";
+import { connect } from "react-redux";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -19,6 +20,10 @@ import { withDateMin } from "../enhancers/withDateMin";
 import { withDateMax } from "../enhancers/withDateMax";
 import { withParam } from "../enhancers/withParam";
 import { withResult } from "../enhancers/withResult";
+import { setParam } from "../redux/actions";
+import { setDateMin } from "../redux/actions";
+import { setDateMax } from "../redux/actions";
+import { setResults } from "../redux/actions";
 import * as Utils from "../utils";
 
 
@@ -129,12 +134,14 @@ class PureResults extends Component {
     .then(res => res.json())
     .then(
       (results) => {
+        const { dispatchResults } = this.props;
         const inputs = [dateMin, dateMax];
         const filteredResults = Utils.filterResults(results, inputs);
         console.log('filteredResults', filteredResults);
         this.setState({
           results: filteredResults
         });
+        dispatchResults(filteredResults);
       },
       (error) => {
         console.log('error on getResults');
@@ -225,6 +232,17 @@ class PureResults extends Component {
 
   }
 }
+
+// const mapDispatchToProps = dispatch => ({
+//   dispatchParam: param => dispatch(setParam(param)),
+//   dispatchDateMin: dateMin => dispatch(setDateMin(dateMin)),
+//   dispatchDateMax: dateMax => dispatch(setDateMax(dateMax)),
+//   dispatchResults: results => dispatch(setResults(results))
+// });
+// export const Results = connect(
+//   null,
+//   mapDispatchToProps
+// )(PureResults);
 
 export const Results = compose(withParam, withDateMin, withDateMax, withResult)(PureResults);
 

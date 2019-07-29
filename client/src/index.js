@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { Header } from "./components/header";
 import { Analyse } from "./components/analyse";
-// import { Averages } from "./components/averages";
 import { SwitchResults } from "./components/switchResults";
 import { store } from "./redux/store";
 

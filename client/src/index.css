@@ -65,6 +65,41 @@ code {
   min-width: 200px;
 }
 
+.calculs {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 70px;
+  margin-top: 50px;
+}
+
+.calculItem {
+  width: 33%;
+  text-align: center;
+}
+
+.moyenneValue,
+.minVal,
+.maxVal {
+    font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
+    font-size: 42px;
+    line-height: 42px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: #777;
+}
+
+.moyenneLabel,
+.minValLabel,
+.maxValLabel {
+    font-family: "Open Sans", "Segoe UI", Tahoma, sans-serif;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 400;
+    color: #BAB8B9;
+    white-space: nowrap;
+    padding: 0;
+}
+
 @media only screen and (min-width : 320px) and (max-width : 768px) {
   .MuiTypography-colorInherit {
     text-align: center;

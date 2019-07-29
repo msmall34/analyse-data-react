@@ -5,7 +5,7 @@ const mapStateToProps = state => ({
   results: state.results.results
 });
 const mapDispatchToProps = dispatch => ({
-  dispatchResults: param => dispatch(setResults(param))
+  dispatchResults: results => dispatch(setResults(results))
 });
 
 export const withResult = connect(
