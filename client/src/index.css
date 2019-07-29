@@ -18,27 +18,27 @@ code {
   padding-top: 90px;
 }
 
-#analyse-system section.analyse {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-}
-
-section.results {
-  display: flex;
-  align-items: center;
-  /* justify-content: center; */
-  width: 100%;
-  border-left: 1px solid #BAB8B9;
-  margin-left: 50px;
-}
-
 .EmptyResults {
   color: #BAB8B9;
   font-size: 28px;
   display: flex;
   width: 100%;
   justify-content: center;
+}
+
+
+#analyse-system section.analyse {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+}
+
+#analyse-system section.results {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-left: 1px solid #BAB8B9;
+  margin-left: 50px;
 }
 
 #menu-param .MuiPaper-root,
@@ -48,7 +48,6 @@ section.results {
 }
 
 #analyse-system .MuiFormControl-root {
-  /*width: 20%;*/
   margin: 20px;
 }
 
@@ -58,6 +57,9 @@ section.results {
 
 #analyse-system .MuiPaper-root.MuiPaper-elevation1.MuiPaper-rounded {
   width: 1200px;
-  /*margin: 0 auto;*/
   margin-left: 70px;
+}
+
+#analyse-system .MuiTableCell-root {
+  min-width: 200px;
 }
