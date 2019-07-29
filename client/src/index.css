@@ -24,6 +24,7 @@ code {
   display: flex;
   width: 100%;
   justify-content: center;
+  text-align: center;
 }
 
 
@@ -62,4 +63,70 @@ code {
 
 #analyse-system .MuiTableCell-root {
   min-width: 200px;
+}
+
+@media only screen and (min-width : 320px) and (max-width : 768px) {
+  .MuiTypography-colorInherit {
+    text-align: center;
+  }
+
+  .container {
+    padding-top: 20px;
+    flex-direction: column;
+  }
+
+  #analyse-system section.analyse {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #analyse-system .MuiButton-containedPrimary {
+    margin-left: 15px;
+  }
+
+  #analyse-system section.results {
+    width: 100%;
+    border-left: 0px;
+    margin: 20px 0;
+  }
+
+  #menu-param .MuiPaper-root,
+  #menu-dateMin .MuiPaper-root,
+  #menu-dateMax .MuiPaper-root {
+    left: 20px !important;
+  }
+
+  #analyse-system .MuiPaper-root.MuiPaper-elevation1.MuiPaper-rounded {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  #analyse-system .MuiTableCell-root {
+    min-width: 0;
+  }
+
+  .MuiTablePagination-toolbar {
+    height: 100% !important;
+    min-height: 100% !important;
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .MuiTypography-caption {
+    margin-top: 10px;
+  }
+
+  .MuiPaper-elevation1 {
+    box-shadow: none !important;
+  }
+
+  .MuiTypography-caption {
+    margin-top: 20px !important;
+  }
+
+  .MuiTableFooter-root .MuiTableCell-root:last-child {
+    border-bottom : 0px solid #0000 !important;
+  }
 }

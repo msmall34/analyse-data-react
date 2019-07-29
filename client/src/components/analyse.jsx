@@ -14,7 +14,7 @@ import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
 import { setDateMax } from "../redux/actions";
 
-const buttonStyles = { width: "90%", marginLeft: "20px" };
+const buttonStyles = { width: "90%", margin: "20px auto" };
 
 const useStyles = makeStyles(theme => ({
   root: {
