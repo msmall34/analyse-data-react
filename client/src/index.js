@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import { Header } from "./components/header";
 import { Analyse } from "./components/analyse";
 // import { Averages } from "./components/averages";
 import { SwitchResults } from "./components/switchResults";
@@ -11,8 +12,11 @@ import "./index.css";
 const App = () => (
   <Provider store={store}>
     <main id="analyse-system" className="App">
-      <Analyse />
-      <SwitchResults />
+      <Header>Analyse des informations systèmes</Header>
+      <div className="container">
+        <Analyse />
+        <SwitchResults />
+      </div>
     </main>
   </Provider>
 );

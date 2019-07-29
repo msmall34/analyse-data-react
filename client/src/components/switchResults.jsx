@@ -7,11 +7,11 @@ import { Results } from "../components/results";
 
 
 const PureSwitchResults = ({ param, dateMin, dateMax }) => (
-  <section>
+  <section className="results">
     {param && param.length && dateMin && dateMin.length && dateMax && dateMax.length ? (
       <Results />
     ) : (
-      <div>empty</div>
+      <div className="EmptyResults">Please select the parameter and date range you wish to analyze</div>
     )}
   </section>
 );

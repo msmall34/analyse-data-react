@@ -3,7 +3,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 
-const styles = { display: "flex", justifyContent: "center" };
+const styles = { display: "flex", justifyContent: "flex-start" };
 
 export const Header = ({ children }) => (
   <AppBar position="static" color="default">

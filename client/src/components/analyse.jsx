@@ -8,14 +8,13 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import { connect } from "react-redux";
-import { Header } from "./header";
 import { ButtonAnalyse } from "./button";
 import * as Utils from "../utils";
 import { setParam } from "../redux/actions";
 import { setDateMin } from "../redux/actions";
 import { setDateMax } from "../redux/actions";
 
-const buttonStyles = { width: "25%" };
+const buttonStyles = { width: "90%", marginLeft: "20px" };
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -122,8 +121,8 @@ class PureAnalyse extends Component {
     const { dateMin } = this.state;
     const { dateMax } = this.state;
     return (
-      <main>
-        <Header>Analyse des informations systèmes</Header>
+      <section className="analyse">
+
         <FormControl className={this.classes.formControl}>
         <FormHelperText>Parametres</FormHelperText>
         <Select
@@ -191,7 +190,7 @@ class PureAnalyse extends Component {
         </FormControl>
 
         {this.loadingButton}
-      </main>
+      </section>
     );
   }
 }

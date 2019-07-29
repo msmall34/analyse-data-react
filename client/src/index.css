@@ -12,8 +12,43 @@ code {
     monospace;
 }
 
+.container {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 90px;
+}
+
+#analyse-system section.analyse {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+}
+
+section.results {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%;
+  border-left: 1px solid #BAB8B9;
+  margin-left: 50px;
+}
+
+.EmptyResults {
+  color: #BAB8B9;
+  font-size: 28px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+#menu-param .MuiPaper-root,
+#menu-dateMin .MuiPaper-root,
+#menu-dateMax .MuiPaper-root {
+  left: 19% !important;
+}
+
 #analyse-system .MuiFormControl-root {
-  width: 20%;
+  /*width: 20%;*/
   margin: 20px;
 }
 
@@ -23,6 +58,6 @@ code {
 
 #analyse-system .MuiPaper-root.MuiPaper-elevation1.MuiPaper-rounded {
   width: 1200px;
-  margin: 0 auto;
-  margin-top: 50px;
+  /*margin: 0 auto;*/
+  margin-left: 70px;
 }
