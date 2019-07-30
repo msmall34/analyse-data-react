@@ -121,17 +121,17 @@ class PureAverages extends Component {
 
         <div className="moyenne calculItem">
           <div className="moyenneValue">{ average }</div>
-          <div className="moyenneLabel">Nombre de "{ this.props.param }" moyen entre le <br/> { this.props.dateMin } et le { this.props.dateMax }</div>
+          <div className="moyenneLabel">Nombre de "{ this.props.param }" moyen <br/> Du { this.props.dateMin } <span> au </span>  { this.props.dateMax }</div>
         </div>
 
         <div className="minValeur calculItem">
           <div className="minVal">{ minVal }</div>
-          <div className="minValLabel"><span>Valeur minimum au <br/> { minValDate }</span></div>
+          <div className="minValLabel"><span>Valeur minimum <br/>au { minValDate }</span></div>
         </div>
 
         <div className="maxValeur calculItem">
           <div className="maxVal">{ maxVal }</div>
-          <div className="maxValLabel">Valeur maximum au <br/> { maxValDate }</div>
+          <div className="maxValLabel">Valeur maximum <br/>au { maxValDate }</div>
         </div>
 
       </div>
