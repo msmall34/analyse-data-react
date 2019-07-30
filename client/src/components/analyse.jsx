@@ -39,6 +39,7 @@ class PureAnalyse extends Component {
     dateMax: "",
     data: [],
     dateMaxList: [],
+    disabled: false,
     loading: false
   };
   async componentDidMount() {
@@ -69,19 +70,19 @@ class PureAnalyse extends Component {
     this.setState({
       dateMin: event.target.value
     });
-    setTimeout(() => {
-      const data = this.state.data;
-      const dateMin = this.state.dateMin;
-      const dateMaxListUpdated = Utils.compareDates(data, dateMin);
-      console.log('this.state handleDateMinChange', this.state);
-      this.setState({
-        dateMaxList: dateMaxListUpdated
-      });
-    }, 100);
+    const data = this.state.data;
+    const dateMin = this.state.dateMin;
+    const dateMaxListUpdated = Utils.compareDates(data, dateMin);
+    console.log('this.state handleDateMinChange', this.state);
+    this.setState({
+      dateMaxList: dateMaxListUpdated
+    });
   };
   handleDateMaxChange = dateMax => event => {
+    console.log('this.state handleDateMaxChange', this.state);
     this.setState({
-      dateMax: event.target.value
+      dateMax: event.target.value,
+      disabled: true
     });
   };
   search = async () => {
@@ -94,13 +95,11 @@ class PureAnalyse extends Component {
     this.setState({ loading: true });
 
     if (param && dateMin && dateMax) {
-      setTimeout(() => {
-        this.setState({ loading: false });
-        dispatchParam(param);
-        dispatchDateMin(dateMin);
-        dispatchDateMax(dateMax);
-        console.log('this.state search', this.state);
-      }, 100);
+      this.setState({ loading: false });
+      dispatchParam(param);
+      dispatchDateMin(dateMin);
+      dispatchDateMax(dateMax);
+      console.log('this.state search', this.state);
     } else {
       // TODO: handle error
       console.log('error in search');
@@ -111,7 +110,7 @@ class PureAnalyse extends Component {
     return loading ? (
       <CircularProgress color="secondary" size={25} />
     ) : (
-      <ButtonAnalyse style={buttonStyles} onPress={this.search}>
+      <ButtonAnalyse style={buttonStyles} onPress={this.search} disabled={!this.state.disabled}>
         Lancer l'analyse
       </ButtonAnalyse>
     );

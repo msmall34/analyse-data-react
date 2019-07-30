@@ -2,20 +2,25 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import Avatar from "@material-ui/core/Avatar";
+import { withDateMin } from "../enhancers/withDateMin";
+import { withDateMax } from "../enhancers/withDateMax";
 import { withParam } from "../enhancers/withParam";
 import { withResult } from "../enhancers/withResult";
-import { setResults } from "../redux/actions";
 import * as Utils from "../utils";
 
 class PureAverages extends Component {
   state = {
     average: 0,
     minVal: '',
+    minValDate: '',
     maxVal: '',
+    maxValDate: '',
   };
 
   calculAverage = (arr) => {
     const { param } = this.props;
+    const { dateMin } = this.props;
+    const { dateMax } = this.props;
     let sum, avg = 0;
     let values = [];
     for (var i = 0; i <= arr.length; i++) {
@@ -34,34 +39,69 @@ class PureAverages extends Component {
     }
   }
 
-  getAverage = (results) => {
-    (results) => {
-      const average = this.calculAverage(results);
-      console.log('average', average);
+  calculMinValue = (arr) => {
+    const { param } = this.props;
+    let minValue = 0;
+    let minValueDate = '';
+    let arrayOfObjs = [];
+    let valuesArray = [];
+    let minValueObj = {};
+    for (var i = 0; i <= arr.length; i++) {
+      if(arr[i]) {
+        arrayOfObjs.push({value: arr[i][param], date:arr[i]['time'] });
+      }
+    }
+    if(arrayOfObjs.length) {
+      for (var i = 0; i <= arrayOfObjs.length; i++) {
+        if(arrayOfObjs[i]) {
+          valuesArray.push(arrayOfObjs[i]['value']);
+        }
+      }
+      minValue = Math.min(...valuesArray);
+      minValueObj = arrayOfObjs.find(obj => obj.value === minValue);
+      minValueDate = minValueObj.date;
       this.setState({
-        average: average
+        minVal: minValue,
+        minValDate: minValueDate
       });
     }
   }
 
-  async componentDidMount() {
-    const { results } = this.props;
-
-    if (results) {
-      this.calculAverage(results);
-    } else {
-      // TODO: handle error
-      console.log('error in results');
+  calculMaxValue = (arr) => {
+    const { param } = this.props;
+    let maxValue = 0;
+    let maxValueDate = '';
+    let arrayOfObjs = [];
+    let valuesArray = [];
+    let maxValueObj = {};
+    for (var i = 0; i <= arr.length; i++) {
+      if(arr[i]) {
+        arrayOfObjs.push({value: arr[i][param], date:arr[i]['time'] });
+      }
     }
-  };
+    if(arrayOfObjs.length) {
+      for (var i = 0; i <= arrayOfObjs.length; i++) {
+        if(arrayOfObjs[i]) {
+          valuesArray.push(arrayOfObjs[i]['value']);
+        }
+      }
+      maxValue = Math.max(...valuesArray);
+      maxValueObj = arrayOfObjs.find(obj => obj.value === maxValue);
+      maxValueDate = maxValueObj.date;
+      this.setState({
+        maxVal: maxValue,
+        maxValDate: maxValueDate
+      });
+    }
+  }
 
   async componentDidUpdate({ results: prevResults }) {
     const { results } = this.props;
-
-
     if (prevResults !== results) {
       if (results) {
         this.calculAverage(results);
+        this.calculMinValue(results);
+        this.calculMaxValue(results);
       } else {
         // TODO: handle error
         console.log('error in results');
@@ -71,23 +111,27 @@ class PureAverages extends Component {
 
   render() {
     const { average } = this.state;
+    const { minVal } = this.state;
+    const { minValDate } = this.state;
+    const { maxVal } = this.state;
+    const { maxValDate } = this.state;
 
     return (
       <div className="calculs">
 
         <div className="moyenne calculItem">
           <div className="moyenneValue">{ average }</div>
-          <div className="moyenneLabel">Moyenne du nombre de "Files" entre le <br/> 16-03 10:11:28 et le 16-03 10:15:28</div>
+          <div className="moyenneLabel">Nombre de "{ this.props.param }" moyen entre le <br/> { this.props.dateMin } et le { this.props.dateMax }</div>
         </div>
 
         <div className="minValeur calculItem">
-          <div className="minVal">{ average }</div>
-          <div className="minValLabel"><span>Valeur minimum au <br/> 16-03 10:11:28</span></div>
+          <div className="minVal">{ minVal }</div>
+          <div className="minValLabel"><span>Valeur minimum au <br/> { minValDate }</span></div>
         </div>
 
         <div className="maxValeur calculItem">
-          <div className="maxVal">{ average }</div>
-          <div className="maxValLabel">Valeur minimum au <br/> 16-03 10:15:28</div>
+          <div className="maxVal">{ maxVal }</div>
+          <div className="maxValLabel">Valeur maximum au <br/> { maxValDate }</div>
         </div>
 
       </div>
@@ -96,12 +140,4 @@ class PureAverages extends Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-//   dispatchResults: results => dispatch(setResults(results))
-// });
-// export const Averages = connect(
-//   null,
-//   mapDispatchToProps
-// )(PureAverages);
-
-export const Averages = compose(withParam, withResult)(PureAverages);
+export const Averages = compose(withParam, withDateMin, withDateMax, withResult)(PureAverages);

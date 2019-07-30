@@ -89,17 +89,3 @@ export const filterResults = (results, inputs) => {
 		}
 	});
 }
-
-export const calculAverage = results => {
-	let sum = 0;
-	let avg = 0;
-	if(results.length) {
-		sum = results.reduce((a, b) => {
-			return a + b;
-		});
-		return avg = sum / results.length;
-	}
-}
-
-
-

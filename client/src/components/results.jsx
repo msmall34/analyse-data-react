@@ -184,19 +184,17 @@ class PureResults extends Component {
         <Table className={this.classes2.table}>
         <TableHead>
             <TableRow>
-              <TableCell>Parametres</TableCell>
-              <TableCell align="right">Dates</TableCell>
-              <TableCell align="right">Valeurs</TableCell>
+              <TableCell align="center">Parametres</TableCell>
+              <TableCell align="center">Dates</TableCell>
+              <TableCell align="center">Valeurs</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {results.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map((item, i, arr) => (
               <TableRow key={i}>
-                <TableCell component="th" scope="row">
-                  {this.props.param}
-                </TableCell>
-                <TableCell align="right">{item.time}</TableCell>
-                <TableCell align="right">{item[this.props.param]}</TableCell>
+                <TableCell align="center">{this.props.param}</TableCell>
+                <TableCell align="center">{item.time}</TableCell>
+                <TableCell align="center">{item[this.props.param]}</TableCell>
               </TableRow>
             ))}
 
@@ -218,6 +216,8 @@ class PureResults extends Component {
                   inputProps: { 'aria-label': 'results per page' },
                   native: true,
                 }}
+                labelRowsPerPage='Nbr de lignes par page'
+                labelDisplayedRows={({ from, to, count }) => `${from}-${to} sur ${count}`}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 ActionsComponent={TablePaginationActions}

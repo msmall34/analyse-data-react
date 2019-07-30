@@ -34,6 +34,12 @@ code {
     flex-direction: column;
 }
 
+.resultsContainer {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
 #analyse-system section.results {
   display: flex;
   align-items: center;
@@ -57,7 +63,6 @@ code {
 }
 
 #analyse-system .MuiPaper-root.MuiPaper-elevation1.MuiPaper-rounded {
-  width: 1200px;
   margin-left: 70px;
 }
 
@@ -67,14 +72,19 @@ code {
 
 .calculs {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-left: 70px;
-  margin-top: 50px;
+  margin-top: 70px;
+  align-items: flex-start;
 }
 
 .calculItem {
-  width: 33%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
 }
 
 .moyenneValue,
@@ -84,7 +94,6 @@ code {
     font-size: 42px;
     line-height: 42px;
     font-weight: 700;
-    white-space: nowrap;
     color: #777;
 }
 
@@ -96,11 +105,22 @@ code {
     line-height: 22px;
     font-weight: 400;
     color: #BAB8B9;
-    white-space: nowrap;
     padding: 0;
 }
 
-@media only screen and (min-width : 320px) and (max-width : 768px) {
+@media only screen and (min-width : 961px) and (max-width : 1138px) {
+  .moyenneValue, .minVal, .maxVal {
+    font-size: 42px;
+    line-height: 42px;
+  }
+
+  #analyse-system .MuiTableCell-root {
+    min-width: 100px;
+    padding: 14px 9px;
+  }
+}
+
+@media only screen and (min-width : 320px) and (max-width : 960px) {
   .MuiTypography-colorInherit {
     text-align: center;
   }
@@ -124,6 +144,11 @@ code {
     width: 100%;
     border-left: 0px;
     margin: 20px 0;
+  }
+
+  .resultsContainer {
+    width: 100%;
+    margin: 0;
   }
 
   #menu-param .MuiPaper-root,
@@ -164,4 +189,22 @@ code {
   .MuiTableFooter-root .MuiTableCell-root:last-child {
     border-bottom : 0px solid #0000 !important;
   }
+
+  .calculs {
+    margin: 0 30px 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .calculItem {
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  .moyenneValue, .minVal, .maxVal {
+    font-size: 40px;
+    line-height: initial;
+  }
 }
+
